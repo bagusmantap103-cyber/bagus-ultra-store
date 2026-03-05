@@ -4,73 +4,93 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Makana | Official Store</title>
+        <title>cilxp store | Premium Experience</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-            body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fafafa; }
-            .glass { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(15px); }
-            .product-card { transition: all 0.4s ease; border: 1px solid #f0f0f0; }
-            .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+            body { font-family: 'Outfit', sans-serif; background: #ffffff; color: #111; }
+            .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(0,0,0,0.05); }
+            .product-card { transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); border: 1px solid #f8f8f8; }
+            .product-card:hover { transform: scale(1.02); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+            .btn-premium { background: linear-gradient(135deg, #111 0%, #333 100%); }
             ::-webkit-scrollbar { display: none; }
+            @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+            @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+            .animate-fade { animation: fade-in 1s ease-out; }
+            .animate-slide { animation: slide-up 0.5s ease-out; }
         </style>
     </head>
-    <body class="max-w-2xl mx-auto min-h-screen pb-32">
+    <body class="max-w-2xl mx-auto min-h-screen pb-40">
 
-        <nav class="sticky top-0 glass z-[1000] px-8 py-7 flex justify-between items-center border-b border-gray-100">
-            <h1 class="font-black text-2xl tracking-tighter italic text-blue-600 uppercase">Makana</h1>
-            <div class="flex gap-5 items-center">
-                <button onclick="toggleAdmin()" class="text-gray-400 hover:text-black transition"><i class="fa fa-sliders text-xl"></i></button>
+        <div id="loginScreen" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center p-12 transition-all duration-1000">
+            <div class="text-center max-w-sm w-full animate-fade">
+                <div class="w-20 h-20 bg-gray-50 rounded-[2rem] flex items-center justify-center text-4xl mx-auto mb-10 border shadow-inner">
+                    <i class="fa fa-shopping-bag text-gray-300"></i>
+                </div>
+                <h1 class="text-3xl font-black tracking-tighter mb-2 uppercase italic text-gray-900">cilxp store</h1>
+                <p class="text-gray-400 mb-10 text-xs tracking-widest leading-relaxed">PREMIUM CURATED COLLECTION</p>
+                <button onclick="closeLogin()" class="w-full btn-premium text-white py-5 rounded-[2rem] font-bold shadow-2xl active:scale-95 transition">MULAI BELANJA</button>
+            </div>
+        </div>
+
+        <nav class="fixed top-6 left-1/2 -translate-x-1/2 glass z-[1000] px-8 py-5 rounded-[2.5rem] flex justify-between items-center w-[90%] max-w-xl shadow-lg border-white/50">
+            <h1 class="font-black text-xl tracking-tighter uppercase italic">cilxp store</h1>
+            <div class="flex gap-6 items-center">
+                <button onclick="toggleAdmin()" class="text-gray-400 hover:text-black"><i class="fa fa-sliders text-xl"></i></button>
                 <div class="relative cursor-pointer" onclick="openCart()">
-                    <i class="fa-solid fa-bag-shopping text-2xl"></i>
-                    <span id="badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">0</span>
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="badge" class="absolute -top-3 -right-3 bg-red-500 text-white text-[9px] rounded-full w-5 h-5 flex items-center justify-center border-4 border-white font-bold">0</span>
                 </div>
             </div>
         </nav>
 
-        <div id="adminPanel" class="fixed inset-0 bg-black/60 z-[5000] hidden items-center justify-center p-6 backdrop-blur-sm">
+        <div id="adminPanel" class="fixed inset-0 bg-black/60 z-[5000] hidden items-center justify-center p-8 backdrop-blur-sm">
             <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl">
-                <h3 class="text-2xl font-black mb-6">Kelola Katalog</h3>
+                <h3 class="text-2xl font-black mb-8 tracking-tight">Tambah Katalog</h3>
                 <div class="space-y-4">
-                    <input type="text" id="pName" placeholder="Nama Produk" class="w-full bg-gray-50 p-5 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500">
-                    <input type="number" id="pPrice" placeholder="Harga (Rp)" class="w-full bg-gray-50 p-5 rounded-2xl border-none outline-none">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase ml-2">Upload Foto Produk:</p>
-                    <input type="file" id="pImage" accept="image/*" class="text-xs text-gray-400 mt-1">
-                    <div class="flex gap-3 mt-6">
-                        <button onclick="toggleAdmin()" class="flex-1 bg-gray-100 py-4 rounded-2xl font-bold">Tutup</button>
-                        <button onclick="saveProduct()" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200">Simpan Produk</button>
+                    <input type="text" id="pName" placeholder="Nama Produk" class="w-full bg-gray-50 p-5 rounded-2xl border-none outline-none text-sm">
+                    <input type="number" id="pPrice" placeholder="Harga (Rp)" class="w-full bg-gray-50 p-5 rounded-2xl border-none outline-none text-sm">
+                    <input type="file" id="pImage" accept="image/*" class="text-xs text-gray-400 mt-2">
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="toggleAdmin()" class="flex-1 bg-gray-100 py-4 rounded-2xl font-bold">Batal</button>
+                        <button onclick="saveProduct()" class="flex-1 btn-premium text-white py-4 rounded-2xl font-bold">Simpan</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="px-8 mt-8 mb-12">
-            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-12 text-white relative overflow-hidden shadow-xl shadow-blue-100">
-                <h2 class="text-4xl font-extrabold mb-2 leading-tight">Gaya Hidup <br> Baru Anda.</h2>
-                <p class="opacity-60 text-sm">Minimalis. Lega. Elegan.</p>
-                <i class="fa fa-shopping-cart absolute -bottom-4 -right-4 text-9xl opacity-10 -rotate-12"></i>
+        <div class="px-8 mt-40 mb-16 animate-fade">
+            <div class="bg-[#F0F6FF] rounded-[3.5rem] p-12 text-black relative overflow-hidden border">
+                <p class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-2">NEW COLLECTION</p>
+                <h2 class="text-5xl font-black mb-6 leading-none tracking-tighter">Gaya <br> Estetik <br> Terkini.</h2>
+                <i class="fa fa-leaf absolute -bottom-4 -right-4 text-9xl opacity-10 rotate-12 text-blue-300"></i>
             </div>
         </div>
 
-        <div class="px-8 space-y-12" id="katalog">
+        <div class="px-8" id="katalog">
             </div>
 
-        <div id="cartModal" class="fixed inset-0 bg-black/30 z-[3000] hidden items-end">
-            <div class="bg-white w-full rounded-t-[4rem] p-12 shadow-2xl animate-slide-up">
-                <h2 class="text-3xl font-black mb-8 text-gray-800">Tas Belanja</h2>
-                <div id="cartItems" class="space-y-5 mb-8 max-h-60 overflow-y-auto"></div>
-                <div class="flex justify-between items-center border-t pt-8 mb-8">
-                    <span class="text-gray-400 font-bold">Total Harga</span>
-                    <span id="totalTxt" class="text-3xl font-black text-blue-600">Rp 0</span>
+        <div id="cartModal" class="fixed inset-0 bg-black/40 z-[3000] hidden items-end">
+            <div class="bg-white w-full rounded-t-[4rem] p-12 shadow-2xl animate-slide">
+                <h2 class="text-2xl font-black mb-10 tracking-tight">Tas Belanja</h2>
+                <div id="cartItems" class="space-y-5 mb-10 max-h-60 overflow-y-auto"></div>
+                <div class="flex justify-between items-center border-t pt-10 mb-10">
+                    <span class="text-gray-400 font-medium">Total Estimasi</span>
+                    <span id="totalTxt" class="text-3xl font-black text-gray-900">Rp 0</span>
                 </div>
-                <button onclick="checkout()" class="w-full bg-blue-600 text-white py-6 rounded-[2.5rem] font-black text-lg shadow-xl shadow-blue-200 active:scale-95 transition">Pesan via WhatsApp</button>
+                <button onclick="checkout()" class="w-full btn-premium text-white py-6 rounded-[2rem] font-black text-lg">Checkout WA</button>
             </div>
         </div>
 
         <script>
-            let db = JSON.parse(localStorage.getItem('bagus_ultra_db')) || [];
+            let db = JSON.parse(localStorage.getItem('bagus_glow_db')) || [];
             let cart = [];
+
+            function closeLogin() { 
+                document.getElementById('loginScreen').style.opacity = '0';
+                setTimeout(() => document.getElementById('loginScreen').remove(), 1000);
+            }
 
             function toggleAdmin() {
                 const el = document.getElementById('adminPanel');
@@ -81,37 +101,32 @@
                 const name = document.getElementById('pName').value;
                 const price = document.getElementById('pPrice').value;
                 const file = document.getElementById('pImage').files[0];
-                if(!name || !price) return alert("Harap isi nama dan harga!");
-
+                if(!name || !price) return alert("Isi nama dan harga!");
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     db.push({ id: Date.now(), name, price: parseInt(price), img: e.target.result });
-                    localStorage.setItem('bagus_ultra_db', JSON.stringify(db));
+                    localStorage.setItem('bagus_glow_db', JSON.stringify(db));
                     render(); toggleAdmin();
                 };
                 if(file) reader.readAsDataURL(file);
-                else reader.onload({ target: { result: "https://via.placeholder.com/600x400/f3f4f6/94a3b8?text=No+Image" } });
+                else reader.onload({ target: { result: "https://via.placeholder.com/600x400/f3f4f6/94a3b8?text=Produk" } });
             }
 
             function render() {
                 const cont = document.getElementById('katalog');
-                if(db.length === 0) {
-                    cont.innerHTML = "<div class='text-center py-20 text-gray-300 font-bold'>Belum ada produk. Klik ikon gear di atas.</div>";
-                    return;
-                }
-                cont.innerHTML = db.map(p => `
-                    <div class="product-card bg-white rounded-[3.5rem] p-8 group relative">
-                        <img src="${p.img}" class="w-full h-80 object-cover rounded-[3rem] mb-8 shadow-sm">
-                        <div class="flex justify-between items-end px-2">
+                cont.innerHTML = db.length ? db.map(p => `
+                    <div class="product-card bg-white rounded-[3.5rem] p-8 mb-12 relative animate-fade">
+                        <img src="${p.img}" class="w-full h-80 object-cover rounded-[2.5rem] mb-8">
+                        <div class="flex justify-between items-end gap-4 px-2">
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-800 mb-2">${p.name}</h3>
-                                <p class="text-blue-600 font-black text-xl tracking-tight">Rp ${p.price.toLocaleString()}</p>
+                                <h3 class="text-2xl font-bold tracking-tight mb-1">${p.name}</h3>
+                                <p class="text-gray-900 font-black text-xl">Rp ${p.price.toLocaleString()}</p>
                             </div>
-                            <button onclick="addToCart(${p.id})" class="w-16 h-16 bg-gray-900 text-white rounded-full text-2xl active:scale-90 transition shadow-xl flex items-center justify-center"><i class="fa fa-plus"></i></button>
+                            <button onclick="addToCart(${p.id})" class="w-16 h-16 bg-gray-50 border rounded-full flex items-center justify-center text-gray-400 hover:text-black transition"><i class="fa fa-plus text-xl"></i></button>
                         </div>
-                        <button onclick="deleteProd(${p.id})" class="absolute top-12 right-12 bg-red-500/90 backdrop-blur-md text-white w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition shadow-lg flex items-center justify-center"><i class="fa fa-trash text-sm"></i></button>
+                        <button onclick="deleteProd(${p.id})" class="absolute top-12 right-12 bg-red-500 text-white w-9 h-9 rounded-full opacity-0 hover:opacity-100 flex items-center justify-center transition"><i class="fa fa-trash text-xs"></i></button>
                     </div>
-                `).join('');
+                `).join('') : "<div class='text-center py-20 text-gray-300 font-bold border-2 border-dashed rounded-[3rem]'>Katalog Kosong. Klik Gear (⚙️)</div>";
             }
 
             function addToCart(id) {
@@ -120,28 +135,26 @@
             }
 
             function openCart() {
-                const modal = document.getElementById('cartModal');
-                modal.classList.toggle('hidden'); modal.classList.toggle('flex');
+                document.getElementById('cartModal').classList.toggle('hidden');
+                document.getElementById('cartModal').classList.toggle('flex');
                 let total = 0;
                 document.getElementById('cartItems').innerHTML = cart.map(i => {
                     total += i.price;
-                    return `<div class="flex justify-between font-bold text-gray-700 bg-gray-50 p-4 rounded-2xl italic"><span>${i.name}</span><span>Rp ${i.price.toLocaleString()}</span></div>`;
+                    return `<div class="flex justify-between font-bold text-gray-900"><span>${i.name}</span><span>Rp ${i.price.toLocaleString()}</span></div>`;
                 }).join('');
                 document.getElementById('totalTxt').innerText = "Rp " + total.toLocaleString();
             }
 
             function checkout() {
-                if(!cart.length) return alert("Keranjang masih kosong, Wakk!");
-                let total = 0;
-                const items = cart.map(i => { total += i.price; return "- " + i.name; }).join('%0A');
-                const msg = `Halo Admin Makana, saya mau order:%0A%0A${items}%0A%0A*Total: Rp ${total.toLocaleString()}*`;
-                window.open(`https://wa.me/+6282169483559?text=${msg}`);
+                if(!cart.length) return alert("Pilih produk!");
+                const msg = `Halo Admin cilxp store, saya mau order koleksi premium Anda.`;
+                window.open(`https://wa.me/+6282169483559?text=${encodeURIComponent(msg)}`);
             }
 
             function deleteProd(id) {
-                if(confirm("Hapus produk ini dari katalog?")) {
+                if(confirm("Hapus produk?")) {
                     db = db.filter(p => p.id !== id);
-                    localStorage.setItem('bagus_ultra_db', JSON.stringify(db));
+                    localStorage.setItem('bagus_glow_db', JSON.stringify(db));
                     render();
                 }
             }
